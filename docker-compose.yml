@@ -1,0 +1,59 @@
+services:
+  node-app:
+    container_name: train-node-app-container
+    build: .
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./.env
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres
+    restart: always
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432:5432"
+
+  # mongo:
+  #   image: mongo
+  #   restart: always
+  #   volumes:
+  #     - mongo-db:/data/db
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: example
+
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+  #     ME_CONFIG_BASICAUTH_ENABLED: true
+  #     ME_CONFIG_BASICAUTH_USERNAME: mongoexpressuser
+  #     ME_CONFIG_BASICAUTH_PASSWORD: mongoexpresspass
+  #   depends_on:
+  #     - mongo
+
+
+  redis:
+    image: redis
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+volumes:
+  mongo-db:
+  postgres-db:
