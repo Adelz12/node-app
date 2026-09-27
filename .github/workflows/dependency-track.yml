@@ -45,7 +45,7 @@ jobs:
           with open('payload.json', 'w') as f:
               json.dump(payload, f)
           "
-          HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" -X "POST" "${{ secrets.DTRACK_URL }}/api/v1/bom" \
+          HTTP_CODE=$(curl -s -o response.txt -w "%{http_code}" -X "PUT" "${{ secrets.DTRACK_URL }}/api/v1/bom" \
             -H "X-Api-Key: ${{ secrets.DTRACK_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d @payload.json)
